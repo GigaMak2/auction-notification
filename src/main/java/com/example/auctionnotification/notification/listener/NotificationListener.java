@@ -1,6 +1,7 @@
 package com.example.auctionnotification.notification.listener;
 
 import com.example.auctionnotification.notification.event.NotificationEvent;
+import com.example.auctionnotification.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
