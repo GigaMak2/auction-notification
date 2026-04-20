@@ -25,6 +25,13 @@ public class SseEmitterService {
         emitter.onTimeout(() -> emitters.remove(userId));
         emitter.onError(e -> emitters.remove(userId));
 
+        // 더미 이벤트
+        try {
+            emitter.send(SseEmitter.event().name("connect").data("connected"));
+        } catch (IOException e) {
+            emitters.remove(userId);
+        }
+
         return emitter;
     }
 
