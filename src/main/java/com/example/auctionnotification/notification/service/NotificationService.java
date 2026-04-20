@@ -1,8 +1,10 @@
 package com.example.auctionnotification.notification.service;
 
+import com.example.auctionnotification.common.exception.ServiceErrorException;
 import com.example.auctionnotification.notification.dto.NotificationResponse;
 import com.example.auctionnotification.notification.entity.Notification;
 import com.example.auctionnotification.notification.event.NotificationEvent;
+import com.example.auctionnotification.notification.exception.NotificationErrorEnum;
 import com.example.auctionnotification.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,5 +37,17 @@ public class NotificationService {
                 .stream()
                 .map(NotificationResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public void markAsRead(Long notificationId, Long userId) {
+        Notification notification = notificationRepository.findById(notificationId).orElseThrow(
+                () -> new ServiceErrorException(NotificationErrorEnum.NOTIFICATION_NOT_FOUND));
+
+        if (!notification.getReceiverId().equals(userId)) {
+            throw new ServiceErrorException(NotificationErrorEnum.NOTIFICATION_FORBIDDEN);
+        }
+
+        notification.markAsRead();
     }
 }
