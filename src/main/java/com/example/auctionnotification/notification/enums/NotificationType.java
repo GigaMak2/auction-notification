@@ -24,7 +24,7 @@ public enum NotificationType {
     AUCTION_CLOSED_WIN {
         @Override
         public String generateMessage(NotificationMessage message) {
-            return "축하합니다! '" + message.itemName() + "' 경메에 낙찰됐습니다.";
+            return "축하합니다! '" + message.itemName() + "' 경매에 낙찰됐습니다.";
         }
     },
     AUCTION_CLOSED_BUYER {

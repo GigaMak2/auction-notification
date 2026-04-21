@@ -49,4 +49,8 @@ public class Notification {
         notification.message = message;
         return notification;
     }
+
+    public void markAsRead() {
+        this.isRead = true;
+    }
 }

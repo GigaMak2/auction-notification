@@ -1,8 +1,6 @@
 package com.example.auctionnotification.notification.service;
 
-import com.example.auctionnotification.notification.dto.NotificationMessage;
 import com.example.auctionnotification.notification.dto.NotificationResponse;
-import com.example.auctionnotification.notification.entity.Notification;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
