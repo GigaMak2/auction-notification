@@ -10,8 +10,13 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.listener.CommonErrorHandler;
+import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
+import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
+import org.springframework.util.backoff.FixedBackOff;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,10 +52,17 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, NotificationEvent> eventKafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, NotificationEvent> eventKafkaListenerContainerFactory(
+            KafkaTemplate<String, NotificationEvent> notificationEventKafkaTemplate
+    ) {
+        DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(notificationEventKafkaTemplate);
+        FixedBackOff backOff = new FixedBackOff(1000L, 2L);
+        DefaultErrorHandler errorHandler = new DefaultErrorHandler(recoverer, backOff);
+
         ConcurrentKafkaListenerContainerFactory<String, NotificationEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(notificationConsumerFactory());
+        factory.setCommonErrorHandler(errorHandler);
         return factory;
     }
 }

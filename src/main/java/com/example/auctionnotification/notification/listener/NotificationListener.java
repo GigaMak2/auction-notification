@@ -21,6 +21,11 @@ public class NotificationListener {
     )
     public void consume(NotificationEvent event) {
         log.info("알림 이벤트 수신: type={}, receiverId={}", event.type(), event.receiverId());
-        notificationService.save(event);
+        try {
+            notificationService.save(event);
+        } catch (Exception e) {
+            log.error("알림 이벤트 처리 실패: type={}, receiverId={}", event.type(), event.receiverId());
+            throw e;
+        }
     }
 }
