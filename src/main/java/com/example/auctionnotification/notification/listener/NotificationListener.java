@@ -24,7 +24,7 @@ public class NotificationListener {
         try {
             notificationService.save(event);
         } catch (Exception e) {
-            log.error("알림 이벤트 처리 실패: type={}, receiverId={}", event.type(), event.receiverId());
+            log.error("알림 이벤트 처리 실패: type={}, receiverId={}", event.type(), event.receiverId(), e);
             throw e;
         }
     }

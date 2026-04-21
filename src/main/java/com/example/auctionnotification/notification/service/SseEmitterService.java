@@ -19,7 +19,9 @@ public class SseEmitterService {
     public SseEmitter subscribe(Long userId) {
         SseEmitter existing = emitters.get(userId);
         if (existing != null) {
-            existing.complete();
+            try {
+                existing.complete();
+            } catch (Exception ignored) {}
             emitters.remove(userId);
         }
 
@@ -52,7 +54,7 @@ public class SseEmitterService {
                     .name("notification")
                     .data(event));
         } catch (IOException e) {
-            log.error("SSE 전송 실패: userId={}", userId);
+            log.error("SSE 전송 실패: userId={}", userId, e);
             emitters.remove(userId);
         }
     }
