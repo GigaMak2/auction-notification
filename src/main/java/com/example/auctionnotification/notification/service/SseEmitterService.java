@@ -52,7 +52,7 @@ public class SseEmitterService {
                     .data(response));
         } catch (IOException e) {
             log.error("SSE 전송 실패: userId={}", userId, e);
-            emitters.remove(userId);
+            emitters.remove(userId, emitter);
         }
     }
 }
