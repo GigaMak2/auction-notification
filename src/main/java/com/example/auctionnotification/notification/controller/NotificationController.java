@@ -49,4 +49,23 @@ public class NotificationController {
         notificationService.markAsRead(notificationId, userId);
         return ResponseEntity.ok(BaseResponse.success(HttpStatus.OK.name(), "읽음 처리 요청 성공", null));
     }
+
+    @DeleteMapping("/{notificationId}")
+    public ResponseEntity<BaseResponse<Void>> delete(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long notificationId
+    ) {
+        Long userId = userDetails.getUserId();
+        notificationService.delete(notificationId, userId);
+        return ResponseEntity.ok(BaseResponse.success(HttpStatus.OK.name(), "알림 삭제 요청 성공", null));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<BaseResponse<Void>> deleteAll(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        Long userId = userDetails.getUserId();
+        notificationService.deleteAll(userId);
+        return ResponseEntity.ok(BaseResponse.success(HttpStatus.OK.name(), "알림 전체 삭제 요청 성공", null));
+    }
 }

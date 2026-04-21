@@ -50,4 +50,21 @@ public class NotificationService {
 
         notification.markAsRead();
     }
+
+    @Transactional
+    public void delete(Long notificationId, Long userId) {
+        Notification notification = notificationRepository.findById(notificationId).orElseThrow(
+                () -> new ServiceErrorException(NotificationErrorEnum.NOTIFICATION_NOT_FOUND));
+
+        if (!notification.getReceiverId().equals(userId)) {
+            throw new ServiceErrorException(NotificationErrorEnum.NOTIFICATION_FORBIDDEN);
+        }
+
+        notificationRepository.delete(notification);
+    }
+
+    @Transactional
+    public void deleteAll(Long userId) {
+        notificationRepository.deleteAllByReceiverId(userId);
+    }
 }
