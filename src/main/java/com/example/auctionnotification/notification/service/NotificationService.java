@@ -10,6 +10,8 @@ import com.example.auctionnotification.notification.repository.NotificationRepos
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.List;
 
@@ -31,8 +33,14 @@ public class NotificationService {
                 type,
                 content
         );
-        notificationRepository.save(notification);
-        sseEmitterService.send(message.receiverId(), NotificationResponse.from(notification));
+
+        Notification savedNotification = notificationRepository.save(notification);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                sseEmitterService.send(message.receiverId(), NotificationResponse.from(savedNotification));
+            }
+        });
     }
 
     @Transactional(readOnly = true)
