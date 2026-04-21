@@ -2,6 +2,7 @@ package com.example.auctionnotification.notification.service;
 
 import com.example.auctionnotification.notification.event.NotificationEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -35,6 +36,7 @@ public class SseEmitterService {
         return emitter;
     }
 
+    @Async("notificationExecutor")
     public void send(Long userId, NotificationEvent event) {
         SseEmitter emitter = emitters.get(userId);
         if (emitter == null) return;
