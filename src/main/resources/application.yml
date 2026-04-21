@@ -7,9 +7,6 @@ spring:
       host: ${REDIS_HOST:localhost}
       port: 6379
 
-  kafka:
-    bootstrap-servers: ${KAFKA_HOST:localhost}:9092
-
   cloud:
     aws:
       parameterstore:
