@@ -17,28 +17,25 @@ public class SseEmitterService {
     private final Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>();
 
     public SseEmitter subscribe(Long userId) {
-        SseEmitter existing = emitters.get(userId);
-        if (existing != null) {
+        // 새 emitter 등록, 기존 emitter 있으면 연결 종료
+        SseEmitter emitter = new SseEmitter(300000L);
+        SseEmitter previous = emitters.put(userId, emitter);
+        if (previous != null) {
             try {
-                existing.complete();
+                previous.complete();
             } catch (Exception ignored) {}
-            emitters.remove(userId);
         }
 
-        // 유저가 SSE 구독 요청하면 emitter 만들어서 Map에 저장
-        SseEmitter emitter = new SseEmitter(300000L);
-        emitters.put(userId, emitter);
-
-        // 연결 끊기면 Map에서 제거
-        emitter.onCompletion(() -> emitters.remove(userId));
-        emitter.onTimeout(() -> emitters.remove(userId));
-        emitter.onError(e -> emitters.remove(userId));
+        // 연결 종료 시 자신이 map에 등록된 경우에만 제거 (재구독 경합 방지)
+        emitter.onCompletion(() -> emitters.remove(userId, emitter));
+        emitter.onTimeout(() -> emitters.remove(userId, emitter));
+        emitter.onError(e -> emitters.remove(userId, emitter));
 
         // 더미 이벤트
         try {
             emitter.send(SseEmitter.event().name("connect").data("connected"));
         } catch (IOException e) {
-            emitters.remove(userId);
+            emitters.remove(userId, emitter);
         }
 
         return emitter;
