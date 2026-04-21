@@ -18,7 +18,7 @@ public class SseEmitterService {
 
     public SseEmitter subscribe(Long userId) {
         // 유저가 SSE 구독 요청하면 emitter 만들어서 Map에 저장
-        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
+        SseEmitter emitter = new SseEmitter(300000L);
         emitters.put(userId, emitter);
 
         // 연결 끊기면 Map에서 제거
