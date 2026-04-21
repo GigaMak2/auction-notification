@@ -17,6 +17,12 @@ public class SseEmitterService {
     private final Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>();
 
     public SseEmitter subscribe(Long userId) {
+        SseEmitter existing = emitters.get(userId);
+        if (existing != null) {
+            existing.complete();
+            emitters.remove(userId);
+        }
+
         // 유저가 SSE 구독 요청하면 emitter 만들어서 Map에 저장
         SseEmitter emitter = new SseEmitter(300000L);
         emitters.put(userId, emitter);
