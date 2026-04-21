@@ -50,6 +50,15 @@ public class NotificationController {
         return ResponseEntity.ok(BaseResponse.success(HttpStatus.OK.name(), "읽음 처리 요청 성공", null));
     }
 
+    @PatchMapping("/read-all")
+    public ResponseEntity<BaseResponse<Void>> markAsReadAll(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        Long userId = userDetails.getUserId();
+        notificationService.markAsReadAll(userId);
+        return ResponseEntity.ok(BaseResponse.success(HttpStatus.OK.name(), "전체 읽음 처리 요청 성공", null));
+    }
+
     @DeleteMapping("/{notificationId}")
     public ResponseEntity<BaseResponse<Void>> delete(
             @AuthenticationPrincipal CustomUserDetails userDetails,

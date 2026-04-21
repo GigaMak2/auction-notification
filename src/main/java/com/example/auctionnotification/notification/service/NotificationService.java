@@ -52,6 +52,15 @@ public class NotificationService {
     }
 
     @Transactional
+    public void markAsReadAll(Long userId) {
+        List<Notification> notifications = notificationRepository.findAllByReceiverIdAndIsReadFalse(userId);
+
+        for (Notification notification : notifications) {
+            notification.markAsRead();
+        }
+    }
+
+    @Transactional
     public void delete(Long notificationId, Long userId) {
         Notification notification = notificationRepository.findById(notificationId).orElseThrow(
                 () -> new ServiceErrorException(NotificationErrorEnum.NOTIFICATION_NOT_FOUND));
