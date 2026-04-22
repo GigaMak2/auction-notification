@@ -18,6 +18,7 @@ public class RedisSubscriberConfig {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         container.addMessageListener(listener, new PatternTopic("auction:notification"));
+        container.addMessageListener(listener, new PatternTopic("auction:notification:vt"));
         return container;
     }
 }
