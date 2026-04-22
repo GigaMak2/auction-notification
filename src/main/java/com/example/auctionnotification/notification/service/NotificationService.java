@@ -43,27 +43,6 @@ public class NotificationService {
         });
     }
 
-    @Transactional
-    public void saveWithVT(NotificationMessage message) {
-        NotificationType type = message.type();
-        String content = type.generateMessage(message);
-
-        Notification notification = Notification.of(
-                message.receiverId(),
-                message.auctionId(),
-                type,
-                content
-        );
-
-        Notification savedNotification = notificationRepository.save(notification);
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-            @Override
-            public void afterCommit() {
-                sseEmitterService.sendWithVT(message.receiverId(), NotificationResponse.from(savedNotification));
-            }
-        });
-    }
-
     @Transactional(readOnly = true)
     public List<NotificationResponse> getNotifications(Long userId) {
         return notificationRepository.findAllByReceiverIdOrderByCreatedAtDesc(userId)

@@ -24,12 +24,7 @@ public class NotificationMessageListener implements MessageListener {
                     message.getBody(),
                     NotificationMessage.class
             );
-            String channel = new String(pattern);
-            if (channel.equals("auction:notification:vt")) {
-                notificationService.saveWithVT(payload);
-            } else  {
-                notificationService.save(payload);
-            }
+            notificationService.save(payload);
         } catch (Exception e) {
             log.error("알림 메시지 처리 실패: {}", e.getMessage(), e);
         }
