@@ -10,7 +10,7 @@ description = 'auction-notification'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -33,9 +33,6 @@ dependencies {
 
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
-    // Kafka
-    implementation 'org.springframework.boot:spring-boot-starter-kafka'
 
     // Monitoring
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
