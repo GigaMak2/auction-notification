@@ -55,4 +55,19 @@ public class SseEmitterService {
             emitters.remove(userId, emitter);
         }
     }
+
+    @Async("notificationExecutorWithVT")
+    public void sendWithVT(Long userId, NotificationResponse response) {
+        SseEmitter emitter = emitters.get(userId);
+        if (emitter == null) return;
+
+        try {
+            emitter.send(SseEmitter.event()
+                    .name("notification")
+                    .data(response));
+        } catch (IOException e) {
+            log.error("SSE 전송 실패(VT): userId={}", userId, e);
+            emitters.remove(userId, emitter);
+        }
+    }
 }
