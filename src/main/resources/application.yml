@@ -15,6 +15,10 @@ spring:
       parameterstore:
         enabled: false
 
+  threads:
+    virtual:
+      enabled: true
+
 management:
   endpoints:
     web:

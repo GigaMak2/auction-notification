@@ -41,7 +41,7 @@ public class SseEmitterService {
         return emitter;
     }
 
-    @Async("notificationExecutor")
+    @Async("notificationExecutorWithVT")
     public void send(Long userId, NotificationResponse response) {
         SseEmitter emitter = emitters.get(userId);
         if (emitter == null) return;
