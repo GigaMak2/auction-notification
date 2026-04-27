@@ -61,11 +61,13 @@ public class SseEmitterService {
     @Scheduled(fixedRate = 30000)
     public void sendPing() {
         for (Map.Entry<Long, SseEmitter> entry : emitters.entrySet()) {
+            Long userId = entry.getKey();
+            SseEmitter emitter = entry.getValue();
             try {
-                entry.getValue().send(SseEmitter.event().name("ping").data(""));
-            } catch (IOException e) {
-                log.warn("SSE ping 전송 실패 - emitter 제거: userId={}", entry.getKey());
-                emitters.remove(entry.getKey(), entry.getValue());
+                emitter.send(SseEmitter.event().name("ping").data(""));
+            } catch (IOException | IllegalStateException e) {
+                log.warn("SSE ping 전송 실패 - emitter 제거: userId={}", userId, e);
+                emitters.remove(userId, emitter);
             }
         }
     }
