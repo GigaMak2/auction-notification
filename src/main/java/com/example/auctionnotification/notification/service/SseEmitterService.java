@@ -3,6 +3,7 @@ package com.example.auctionnotification.notification.service;
 import com.example.auctionnotification.notification.dto.NotificationResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -53,6 +54,21 @@ public class SseEmitterService {
         } catch (IOException e) {
             log.error("SSE 전송 실패: userId={}", userId, e);
             emitters.remove(userId, emitter);
+        }
+    }
+
+    @Async("notificationExecutorWithVT")
+    @Scheduled(fixedRate = 30000)
+    public void sendPing() {
+        for (Map.Entry<Long, SseEmitter> entry : emitters.entrySet()) {
+            Long userId = entry.getKey();
+            SseEmitter emitter = entry.getValue();
+            try {
+                emitter.send(SseEmitter.event().name("ping").data(""));
+            } catch (IOException | IllegalStateException e) {
+                log.warn("SSE ping 전송 실패 - emitter 제거: userId={}", userId, e);
+                emitters.remove(userId, emitter);
+            }
         }
     }
 }
