@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.restdocs.test.autoconfigure.AutoConfigureRestDocs;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -26,11 +27,19 @@ import java.util.List;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest({NotificationController.class, GlobalExceptionHandler.class})
 @AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureRestDocs
 class NotificationControllerTest {
 
     @Autowired
@@ -69,7 +78,12 @@ class NotificationControllerTest {
         mockMvc.perform(get("/api/notifications/subscribe")
                         .header("Authorization", "Bearer accessToken")
                         .accept(MediaType.TEXT_EVENT_STREAM_VALUE))
-                .andExpect(request().asyncStarted());
+                .andExpect(request().asyncStarted())
+                .andDo(document("notification/subscribe",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(headerWithName("Authorization").description("Bearer 액세스 토큰"))
+                ));
 
         verify(sseEmitterService).subscribe(1L);
     }
@@ -101,7 +115,12 @@ class NotificationControllerTest {
                 .andExpect(jsonPath("$.data.length()").value(2))
                 .andExpect(jsonPath("$.data[0].notificationId").value(1L))
                 .andExpect(jsonPath("$.data[0].type").value("AUCTION_STARTED"))
-                .andExpect(jsonPath("$.data[0].isRead").value(false));
+                .andExpect(jsonPath("$.data[0].isRead").value(false))
+                .andDo(document("notification/get-notifications",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(headerWithName("Authorization").description("Bearer 액세스 토큰"))
+                ));
     }
 
     @Test
@@ -135,7 +154,13 @@ class NotificationControllerTest {
                         .header("Authorization", "Bearer accessToken"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("읽음 처리 요청 성공"));
+                .andExpect(jsonPath("$.message").value("읽음 처리 요청 성공"))
+                .andDo(document("notification/mark-as-read",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(headerWithName("Authorization").description("Bearer 액세스 토큰")),
+                        pathParameters(parameterWithName("notificationId").description("알림 식별자"))
+                ));
 
         verify(notificationService).markAsRead(1L, 1L);
     }
@@ -166,7 +191,12 @@ class NotificationControllerTest {
                         .header("Authorization", "Bearer accessToken"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("전체 읽음 처리 요청 성공"));
+                .andExpect(jsonPath("$.message").value("전체 읽음 처리 요청 성공"))
+                .andDo(document("notification/mark-as-read-all",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(headerWithName("Authorization").description("Bearer 액세스 토큰"))
+                ));
 
         verify(notificationService).markAsReadAll(1L);
     }
@@ -187,7 +217,13 @@ class NotificationControllerTest {
                         .header("Authorization", "Bearer accessToken"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("알림 삭제 요청 성공"));
+                .andExpect(jsonPath("$.message").value("알림 삭제 요청 성공"))
+                .andDo(document("notification/delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(headerWithName("Authorization").description("Bearer 액세스 토큰")),
+                        pathParameters(parameterWithName("notificationId").description("알림 식별자"))
+                ));
 
         verify(notificationService).delete(1L, 1L);
     }
@@ -218,7 +254,12 @@ class NotificationControllerTest {
                         .header("Authorization", "Bearer accessToken"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("알림 전체 삭제 요청 성공"));
+                .andExpect(jsonPath("$.message").value("알림 전체 삭제 요청 성공"))
+                .andDo(document("notification/delete-all",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(headerWithName("Authorization").description("Bearer 액세스 토큰"))
+                ));
 
         verify(notificationService).deleteAll(1L);
     }
