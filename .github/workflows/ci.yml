@@ -32,4 +32,4 @@ jobs:
       - name: check if builds
         run: |
           chmod +x gradlew
-          ./gradlew build -x test
+          ./gradlew build -x test -x asciidoctor
