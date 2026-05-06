@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/actuator/health").permitAll()
+                    auth.requestMatchers("/actuator/health", "/docs/**").permitAll()
                             .requestMatchers("/actuator/**").hasRole("ADMIN");
 
                     if (environment.acceptsProfiles(Profiles.of("!prod"))) {
