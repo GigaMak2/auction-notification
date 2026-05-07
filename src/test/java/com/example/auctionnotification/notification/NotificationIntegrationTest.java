@@ -4,6 +4,7 @@ import com.example.auctionnotification.notification.dto.NotificationMessage;
 import com.example.auctionnotification.notification.entity.Notification;
 import com.example.auctionnotification.notification.enums.NotificationType;
 import com.example.auctionnotification.notification.repository.NotificationRepository;
+import com.example.auctionnotification.testutils.BaseIntegrationTest;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.AfterEach;
@@ -32,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Transactional
-public class NotificationIntegrationTest {
+public class NotificationIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
