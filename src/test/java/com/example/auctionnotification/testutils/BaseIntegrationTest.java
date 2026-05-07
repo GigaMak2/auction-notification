@@ -8,7 +8,7 @@ import org.testcontainers.utility.DockerImageName;
 
 public abstract class BaseIntegrationTest {
 
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
+    static PostgreSQLContainer postgres = new PostgreSQLContainer(
             DockerImageName.parse("postgres:16-alpine")
     );
 
