@@ -42,7 +42,7 @@ public class SseEmitterService {
         return emitter;
     }
 
-    @Async("notificationExecutorWithVT")
+    @Async
     public void send(Long userId, NotificationResponse response) {
         SseEmitter emitter = emitters.get(userId);
         if (emitter == null) return;
@@ -57,7 +57,7 @@ public class SseEmitterService {
         }
     }
 
-    @Async("notificationExecutorWithVT")
+    @Async
     @Scheduled(fixedRate = 30000)
     public void sendPing() {
         for (Map.Entry<Long, SseEmitter> entry : emitters.entrySet()) {
