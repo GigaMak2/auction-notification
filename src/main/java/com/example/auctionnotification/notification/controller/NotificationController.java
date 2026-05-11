@@ -37,7 +37,7 @@ public class NotificationController {
     ) {
         Long userId = userDetails.getUserId();
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponse.success(
-                HttpStatus.OK.name(), "알림 목록 조회 요청 성공", notificationService.getNotifications(userId)));
+                HttpStatus.OK.name(), "알림 목록을 조회했습니다", notificationService.getNotifications(userId)));
     }
 
     @PatchMapping("/{notificationId}/read")
@@ -47,7 +47,7 @@ public class NotificationController {
     ) {
         Long userId = userDetails.getUserId();
         notificationService.markAsRead(notificationId, userId);
-        return ResponseEntity.ok(BaseResponse.success(HttpStatus.OK.name(), "읽음 처리 요청 성공", null));
+        return ResponseEntity.ok(BaseResponse.success(HttpStatus.OK.name(), "알림을 읽음 처리했습니다", null));
     }
 
     @PatchMapping("/read-all")
@@ -56,7 +56,7 @@ public class NotificationController {
     ) {
         Long userId = userDetails.getUserId();
         notificationService.markAsReadAll(userId);
-        return ResponseEntity.ok(BaseResponse.success(HttpStatus.OK.name(), "전체 읽음 처리 요청 성공", null));
+        return ResponseEntity.ok(BaseResponse.success(HttpStatus.OK.name(), "모든 알림을 읽음 처리했습니다", null));
     }
 
     @DeleteMapping("/{notificationId}")
@@ -66,7 +66,7 @@ public class NotificationController {
     ) {
         Long userId = userDetails.getUserId();
         notificationService.delete(notificationId, userId);
-        return ResponseEntity.ok(BaseResponse.success(HttpStatus.OK.name(), "알림 삭제 요청 성공", null));
+        return ResponseEntity.ok(BaseResponse.success(HttpStatus.OK.name(), "알림을 삭제했습니다", null));
     }
 
     @DeleteMapping
@@ -75,6 +75,6 @@ public class NotificationController {
     ) {
         Long userId = userDetails.getUserId();
         notificationService.deleteAll(userId);
-        return ResponseEntity.ok(BaseResponse.success(HttpStatus.OK.name(), "알림 전체 삭제 요청 성공", null));
+        return ResponseEntity.ok(BaseResponse.success(HttpStatus.OK.name(), "모든 알림을 삭제했습니다", null));
     }
 }

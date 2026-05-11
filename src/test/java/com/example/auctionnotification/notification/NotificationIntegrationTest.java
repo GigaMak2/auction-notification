@@ -83,7 +83,7 @@ public class NotificationIntegrationTest extends BaseIntegrationTest {
                         .header("Authorization", "Bearer " + userToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("알림 목록 조회 요청 성공"))
+                .andExpect(jsonPath("$.message").value("알림 목록을 조회했습니다"))
                 .andExpect(jsonPath("$.data.length()").value(2));
     }
 
@@ -95,7 +95,7 @@ public class NotificationIntegrationTest extends BaseIntegrationTest {
                         .header("Authorization", "Bearer " + userToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("알림 목록 조회 요청 성공"))
+                .andExpect(jsonPath("$.message").value("알림 목록을 조회했습니다"))
                 .andExpect(jsonPath("$.data.length()").value(0));
     }
 
@@ -123,7 +123,7 @@ public class NotificationIntegrationTest extends BaseIntegrationTest {
                         .header("Authorization", "Bearer " + userToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("읽음 처리 요청 성공"));
+                .andExpect(jsonPath("$.message").value("알림을 읽음 처리했습니다"));
     }
 
     @Test
@@ -168,7 +168,7 @@ public class NotificationIntegrationTest extends BaseIntegrationTest {
                         .header("Authorization", "Bearer " + userToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("전체 읽음 처리 요청 성공"));
+                .andExpect(jsonPath("$.message").value("모든 알림을 읽음 처리했습니다"));
     }
 
 
@@ -187,7 +187,7 @@ public class NotificationIntegrationTest extends BaseIntegrationTest {
                         .header("Authorization", "Bearer " + userToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("알림 삭제 요청 성공"));
+                .andExpect(jsonPath("$.message").value("알림을 삭제했습니다"));
     }
 
     @Test
@@ -232,7 +232,7 @@ public class NotificationIntegrationTest extends BaseIntegrationTest {
                         .header("Authorization", "Bearer " + userToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("알림 전체 삭제 요청 성공"));
+                .andExpect(jsonPath("$.message").value("모든 알림을 삭제했습니다"));
     }
 
 
