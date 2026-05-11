@@ -111,7 +111,7 @@ class NotificationControllerTest {
                         .header("Authorization", "Bearer accessToken"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("알림 목록 조회 요청 성공"))
+                .andExpect(jsonPath("$.message").value("알림 목록을 조회했습니다"))
                 .andExpect(jsonPath("$.data.length()").value(2))
                 .andExpect(jsonPath("$.data[0].notificationId").value(1L))
                 .andExpect(jsonPath("$.data[0].type").value("AUCTION_STARTED"))
@@ -134,7 +134,7 @@ class NotificationControllerTest {
                         .header("Authorization", "Bearer accessToken"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("알림 목록 조회 요청 성공"))
+                .andExpect(jsonPath("$.message").value("알림 목록을 조회했습니다"))
                 .andExpect(jsonPath("$.data.length()").value(0));
     }
 
@@ -154,7 +154,7 @@ class NotificationControllerTest {
                         .header("Authorization", "Bearer accessToken"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("읽음 처리 요청 성공"))
+                .andExpect(jsonPath("$.message").value("알림을 읽음 처리했습니다"))
                 .andDo(document("notification/mark-as-read",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -191,7 +191,7 @@ class NotificationControllerTest {
                         .header("Authorization", "Bearer accessToken"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("전체 읽음 처리 요청 성공"))
+                .andExpect(jsonPath("$.message").value("모든 알림을 읽음 처리했습니다"))
                 .andDo(document("notification/mark-as-read-all",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -217,7 +217,7 @@ class NotificationControllerTest {
                         .header("Authorization", "Bearer accessToken"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("알림 삭제 요청 성공"))
+                .andExpect(jsonPath("$.message").value("알림을 삭제했습니다"))
                 .andDo(document("notification/delete",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -254,7 +254,7 @@ class NotificationControllerTest {
                         .header("Authorization", "Bearer accessToken"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("알림 전체 삭제 요청 성공"))
+                .andExpect(jsonPath("$.message").value("모든 알림을 삭제했습니다"))
                 .andDo(document("notification/delete-all",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
